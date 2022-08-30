@@ -193,6 +193,9 @@ var dptTypes = map[string]Datapoint{
 	// 18.xxx
 	"18.001": new(DPT_18001),
 
+	// 19.xxx
+	"19.001": new(DPT_19001),
+
 	// 20.xxx
 	"20.102": new(DPT_20102),
 
