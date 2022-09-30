@@ -36,15 +36,13 @@ func (d DPT_5001) String() string {
 }
 
 // DPT_5003 represents DPT 5.003 / Angle.
-type DPT_5003 float32
+type DPT_5003 uint16
 
 func (d DPT_5003) Pack() []byte {
-	if d <= 0 {
-		return packU8(0)
-	} else if d >= 360 {
+	if d >= 360 {
 		return packU8(255)
 	} else {
-		return packU8(uint8(d * 255 / 360))
+		return packU8(uint8(math.Round(float64(d) * 255 / 360)))
 	}
 }
 
@@ -54,7 +52,7 @@ func (d *DPT_5003) Unpack(data []byte) error {
 		return err
 	}
 
-	*d = DPT_5003(value) * 360 / 255
+	*d = DPT_5003(math.Round(float64(value) * 360 / 255))
 
 	return nil
 }
@@ -64,7 +62,7 @@ func (d DPT_5003) Unit() string {
 }
 
 func (d DPT_5003) String() string {
-	return fmt.Sprintf("%.2f°", float32(d))
+	return fmt.Sprintf("%d°", d)
 }
 
 // DPT_5004 represents DPT 5.004 / Percent_U8.
