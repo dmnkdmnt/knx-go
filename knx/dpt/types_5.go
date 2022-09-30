@@ -1,18 +1,19 @@
 package dpt
 
-import "fmt"
+import (
+	"fmt"
+	"math"
+)
 
 // DPT_5001 represents DPT 5.001 / Scaling.
-type DPT_5001 float32
+type DPT_5001 uint8
 
 func (d DPT_5001) Pack() []byte {
-	if d <= 0 {
-		return packU8(0)
-	} else if d >= 100 {
-		return packU8(255)
-	} else {
-		return packU8(uint8(d * 2.55))
+	v := d
+	if v > 100 {
+		v = 100
 	}
+	return packU8(uint8(math.Round(float64(v) * 2.55)))
 }
 
 func (d *DPT_5001) Unpack(data []byte) error {
@@ -21,7 +22,7 @@ func (d *DPT_5001) Unpack(data []byte) error {
 		return err
 	}
 
-	*d = DPT_5001(value) / 2.55
+	*d = DPT_5001(math.Round(float64(value) / 2.55))
 
 	return nil
 }
@@ -31,7 +32,7 @@ func (d DPT_5001) Unit() string {
 }
 
 func (d DPT_5001) String() string {
-	return fmt.Sprintf("%.2f%%", float32(d))
+	return fmt.Sprintf("%d%%", d)
 }
 
 // DPT_5003 represents DPT 5.003 / Angle.
